@@ -1,5 +1,4 @@
-// public/script.js - Envio de dados e geração do PDF
-// Crie um arquivo "script.js" na pasta "public" e cole o seguinte código:
+
 
 document.getElementById('inventoryForm').addEventListener('submit', async function (e) {
     e.preventDefault();
