@@ -1,38 +1,39 @@
+// server.js - Servidor Node.js para gerar PDF
 const express = require('express');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
+const path = require('path');
 
 const app = express();
 app.use(express.json());
-app.use(express.static('public')); // Para servir arquivos HTML e JS
+app.use(express.static('public'));
 
 app.post('/generate-pdf', (req, res) => {
-    const { nome, idade, cidade } = req.body; // Dados recebidos do frontend
-
+    const { nomeCliente, telefone, origem, destino, itens } = req.body;
     const doc = new PDFDocument();
-    const fileName = `output.pdf`;
-    const filePath = `./public/${fileName}`;
+    const filePath = path.join(__dirname, 'public', 'inventario.pdf');
+    const stream = fs.createWriteStream(filePath);
+    doc.pipe(stream);
 
-    doc.pipe(fs.createWriteStream(filePath));
+    doc.fontSize(18).text('INVENTÁRIO DE MUDANÇA', { align: 'center' });
+    doc.moveDown();
+    doc.fontSize(14).text(`Nome: ${nomeCliente}`);
+    doc.text(`Telefone: ${telefone}`);
+    doc.text(`Endereço de Origem: ${origem}`);
+    doc.text(`Endereço de Destino: ${destino}`);
+    doc.moveDown();
 
-    // Criando um layout com bloquinhos
-    doc.fontSize(20).text('Dados do Usuário', { align: 'center' });
-
-    doc.rect(50, 100, 500, 30).stroke();
-    doc.text(`Nome: ${nome}`, 60, 110);
-
-    doc.rect(50, 150, 500, 30).stroke();
-    doc.text(`Idade: ${idade}`, 60, 160);
-
-    doc.rect(50, 200, 500, 30).stroke();
-    doc.text(`Cidade: ${cidade}`, 60, 210);
+    doc.fontSize(12).text('Itens:', { underline: true });
+    itens.forEach((item, index) => {
+        doc.text(`${index + 1}. ${item.nome} - Qtd: ${item.qtd} - Valor: R$ ${item.valor}`);
+    });
 
     doc.end();
-
-    res.json({ url: `/${fileName}` }); // Retorna a URL do PDF
+    stream.on('finish', () => {
+        res.json({ url: '/inventario.pdf' });
+    });
 });
 
 app.listen(3000, () => {
     console.log('Servidor rodando em http://localhost:3000');
 });
-

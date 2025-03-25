@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventário de Mudança</title>
+</head>
+<body>
+    <h1>Preencha os Dados do Inventário</h1>
+    <form id="inventoryForm">
+        <label>Nome:</label>
+        <input type="text" id="nomeCliente" required>
+        <br>
+        <label>Telefone:</label>
+        <input type="text" id="telefone" required>
+        <br>
+        <label>Origem:</label>
+        <input type="text" id="origem" required>
+        <br>
+        <label>Destino:</label>
+        <input type="text" id="destino" required>
+        <br>
+        <h3>Itens:</h3>
+        <div id="itemsContainer"></div>
+        <button type="button" onclick="addItem()">Adicionar Item</button>
+        <br>
+        <button type="submit">Gerar PDF</button>
+    </form>
+    <br>
+    <a id="downloadLink" style="display: none;" target="_blank">Baixar PDF</a>
+    <script src="script.js"></script>
+</body>
+</html>
